@@ -4,13 +4,13 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound, MissingPermissions, MissingRole, MissingRequiredArgument
 
-import json
-import re
 import logging
 from config import *
 
 # Logging
 logging.basicConfig(level=logging.INFO)
+
+cogs = ['moderation', 'commands']
 
 
 class Heather(commands.Bot):
@@ -22,7 +22,10 @@ class Heather(commands.Bot):
     async def on_ready(self):
         """Prints 'Bot is live!' to the console when the bot is ready"""
         await self.change_presence(status=discord.Status.idle,
-                                   activity=discord.Activity(type=discord.ActivityType.playing, name='use prefix "$"'))
+                                   activity=discord.Activity(type=discord.ActivityType.playing, name='use prefix "h."'))
+
+        for cog in cogs:
+            self.load_extension(cog)
 
         print(f"Bot is live!")
 
@@ -65,103 +68,6 @@ class Heather(commands.Bot):
 
 
 bot = Heather()
-
-
-@bot.command()
-async def ping(ctx):
-    return await ctx.send(f"Pong! {round(bot.latency * 1000)}ms")
-
-
-@bot.command()
-async def members(ctx):
-    """How many members are in the server?"""
-    await ctx.send(f"Number of users in the server: {len(bot.users)}")
-
-
-@bot.command()
-async def messages(ctx, member: discord.Member = None):
-    """How many messages did I send?"""
-    member = ctx.author if member is None else member
-    channel = ctx.channel
-    count = 0
-    async for msg in channel.history(limit=None):
-        if msg.author == member:
-            count += 1
-
-    await ctx.send(f"{member.display_name} has sent {count} message(s)!")
-
-
-@bot.command()
-@commands.has_permissions(manage_messages=True)
-async def purge(ctx, num: int = 5):
-    """Delete messages in bunches"""
-    num = 150 if num > 150 else num+1  # sets num to 100 if num is greater than 100
-    await ctx.channel.purge(limit=num)
-
-
-@bot.command()
-@commands.has_permissions(kick_members=True)
-async def kick(ctx, member: discord.Member, reason: str = None):
-    """Kick function"""
-    if ctx.author != member:
-        await member.kick(reason=reason)
-        await ctx.send(f"{member.display_name} has been kicked.")
-    else:
-        await ctx.send(f"You can't kick yourself {member.mention}")
-
-
-@bot.command()
-@commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member, reason: str = None):
-    """Ban function"""
-    if member != ctx.author:
-        await member.ban(reason=reason)
-        await ctx.send(f"{member.display_name} has been banned.")
-    else:
-        await ctx.send(f"You can't ban yourself {member.mention}")
-
-
-@bot.command()
-@commands.has_permissions(ban_members=True)
-async def unban(ctx, *, member):
-    """Unban function"""
-    banned_users = await ctx.guild.bans()
-    member_name, member_id = member.split("#")
-
-    for ban_entry in banned_users:
-        user = ban_entry.user
-        if (member_name, member_id) == (user.name, user.discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f"{user.mention} has been unbanned!")
-            return
-
-
-# TODO: Make warn command
-@bot.command()
-@commands.has_permissions(administrator=True)
-async def warn(ctx, member: discord.Member, reason: str = None):
-    pass
-
-
-@bot.command()
-async def commands(ctx):
-    """DMs the user all the commands"""
-    all_commands = ['```kick (staff only): kicks a member',
-                    'ban (staff only): bans a member',
-                    'purge (staff only): bunch delete',
-                    'messages: returns the number of messages a member sent',
-                    'members: returns the total number of members in the server',
-                    'ping: returns the latency of the bot```']
-
-    user = bot.get_user(ctx.author.id)
-    cmd = '\n'.join(all_commands)
-    try:
-        await user.send(f"Commands:")
-        await user.send(f"{cmd}")
-        await ctx.send("Commands were sent in DMs")
-    except Exception:
-        await ctx.send(f"Commands:"
-                       f"{cmd}")
 
 
 if __name__ == "__main__":
