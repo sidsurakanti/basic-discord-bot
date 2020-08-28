@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord.ext.commands import CommandNotFound, MissingPermissions, MissingRole
 
 import json
-from pprint import PrettyPrinter as p
 import re
 import logging
 
