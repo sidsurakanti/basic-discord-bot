@@ -12,11 +12,6 @@ from config import *
 # Logging
 logging.basicConfig(level=logging.INFO)
 
-# Initialize bot and set command prefix as "h."
-# bot = commands.Bot(command_prefix='h.')
-# Bot token
-# BOT_TOKEN = "NzQ4NjA1MzY1NDc3ODM0Nzcy.X0f3Ew.AhLwFt40bfPJu7VLQ3pcaQu2qwc"
-
 
 class Heather(commands.Bot):
     def __init__(self, **kwargs):
@@ -99,8 +94,8 @@ async def messages(ctx, member: discord.Member = None):
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def purge(ctx, num: int = 5):
-    """Wanna delete messages in bunches?"""
-    num = 100 if num > 100 else num  # sets num to 100 if num is greater than 100
+    """Delete messages in bunches"""
+    num = 150 if num > 150 else num+1  # sets num to 100 if num is greater than 100
     await ctx.channel.purge(limit=num)
 
 
@@ -108,16 +103,22 @@ async def purge(ctx, num: int = 5):
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, member: discord.Member, reason: str = None):
     """Kick function"""
-    await member.kick(reason=reason)
-    await ctx.send(f"{member.display_name} has been kicked.")
+    if ctx.author != member:
+        await member.kick(reason=reason)
+        await ctx.send(f"{member.display_name} has been kicked.")
+    else:
+        await ctx.send(f"You can't kick yourself {member.mention}")
 
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
 async def ban(ctx, member: discord.Member, reason: str = None):
     """Ban function"""
-    await member.ban(reason=reason)
-    await ctx.send(f"{member.display_name} has been banned.")
+    if member != ctx.author:
+        await member.ban(reason=reason)
+        await ctx.send(f"{member.display_name} has been banned.")
+    else:
+        await ctx.send(f"You can't ban yourself {member.mention}")
 
 
 @bot.command()
@@ -134,8 +135,6 @@ async def unban(ctx, *, member):
             await ctx.send(f"{user.mention} has been unbanned!")
             return
 
-    # all_commands.append('unban (staff only): unbans a member')
-
 
 # TODO: Make warn command
 @bot.command()
@@ -146,19 +145,23 @@ async def warn(ctx, member: discord.Member, reason: str = None):
 
 @bot.command()
 async def commands(ctx):
-    all_commands = ['kick (staff only): kicks a member',
+    """DMs the user all the commands"""
+    all_commands = ['```kick (staff only): kicks a member',
                     'ban (staff only): bans a member',
                     'purge (staff only): bunch delete',
                     'messages: returns the number of messages a member sent',
                     'members: returns the total number of members in the server',
-                    'ping: returns the latency of the bot']
+                    'ping: returns the latency of the bot```']
 
     user = bot.get_user(ctx.author.id)
     cmd = '\n'.join(all_commands)
     try:
-        await user.send(f"Commands: \n{cmd}")
-    except:
-        await ctx.send(f"Commands: \n{cmd}")
+        await user.send(f"Commands:")
+        await user.send(f"{cmd}")
+        await ctx.send("Commands were sent in DMs")
+    except Exception:
+        await ctx.send(f"Commands:"
+                       f"{cmd}")
 
 
 if __name__ == "__main__":
