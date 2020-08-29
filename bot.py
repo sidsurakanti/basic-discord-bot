@@ -6,11 +6,10 @@ from discord.ext.commands import CommandNotFound, MissingPermissions, MissingRol
 
 import logging
 from config import *
+import os
 
-# Logging
-logging.basicConfig(level=logging.INFO)
-
-cogs = ['moderation', 'commands']
+# # LOGGING
+# logging.basicConfig(level=logging.INFO)
 
 
 class Heather(commands.Bot):
@@ -24,8 +23,10 @@ class Heather(commands.Bot):
         await self.change_presence(status=discord.Status.idle,
                                    activity=discord.Activity(type=discord.ActivityType.playing, name='use prefix "h."'))
 
-        for cog in cogs:
-            self.load_extension(cog)
+        # loads cogs
+        for cog in os.listdir('./cogs'):
+            if cog.endswith('.py'):
+                self.load_extension(f"cogs.{cog[:-3]}")
 
         print(f"Bot is live!")
 
