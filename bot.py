@@ -1,9 +1,8 @@
-import asyncio
-
 import discord
 from discord.ext import commands
 from discord.ext.commands import CommandNotFound, MissingPermissions, MissingRole, MissingRequiredArgument
 
+import asyncio
 import logging
 from config import *
 import os
@@ -11,19 +10,22 @@ import os
 # # LOGGING
 # logging.basicConfig(level=logging.INFO)
 
+print('Bot is connecting...')
 
 class Heather(commands.Bot):
     def __init__(self, **kwargs):
-        super().__init__(command_prefix=kwargs.pop('command_prefix', 'h.'),
+        super().__init__(command_prefix=kwargs.pop('command_prefix', ('h.', 'H.', 'heather.', 'Heather.')),
                          case_insensitive=True,
                          **kwargs)
 
+
+    # EVENTS
     async def on_ready(self):
         """Prints 'Bot is live!' to the console when the bot is ready"""
-        await self.change_presence(status=discord.Status.idle,
+        await self.change_presence(status=discord.Status.online,
                                    activity=discord.Activity(type=discord.ActivityType.playing, name='use prefix "h."'))
 
-        # loads cogs
+        # loads all cogs in the cogs folder
         for cog in os.listdir('./cogs'):
             if cog.endswith('.py'):
                 self.load_extension(f"cogs.{cog[:-3]}")
