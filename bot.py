@@ -42,12 +42,12 @@ class Heather(commands.Bot):
 
     async def on_member_join(self, member):
         """New member?!"""
-        channel = self.get_channel(748332512371146823)
+        channel = self.get_channel(748220087827300432)
         await channel.send(f"Welcome to the server {member.mention}!")
 
     async def on_member_remove(self, member):
         """Did a member just leave?"""
-        channel = self.get_channel(748569304995201045)
+        channel = self.get_channel(748220087827300432)
         await channel.send(f"{member.mention} has left this server!")
 
     async def on_command_error(self, ctx, error):
