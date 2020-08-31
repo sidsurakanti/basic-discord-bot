@@ -1,5 +1,8 @@
 from discord.ext import commands
+from discord.utils import get
 import discord
+
+import datetime
 
 
 def setup(bot):
@@ -56,3 +59,17 @@ class Moderation(commands.Cog, name="Moderation"):
         """Warns function (not finished)"""
         pass
 
+    # TODO: Make mute command
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def mute(self, ctx, member: discord.Member, *, reason=None):
+        """Mute function"""
+        await member.add_roles(get(member.guild.roles, name='Muted'))
+        await ctx.send(embed=discord.Embed(title=f"Muted {member.display_name}", color=discord.Colour.blue()))
+    
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unmute(self, ctx, member: discord.Member):
+        """Unmuted function"""
+        await member.remove_roles(get(member.guild.roles, name="Muted"))
+        await ctx.send(embed=discord.Embed(title=f"Unmuted {member.display_name}", color=discord.Colour.blue()))

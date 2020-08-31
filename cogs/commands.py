@@ -75,6 +75,7 @@ class Commands(commands.Cog, name="Commands"):
         all_commands = ['```kick (staff only)',
                         'ban (staff only)',
                         'purge (staff only)',
+                        'mute (staff only)',
                         'messages',
                         'members',
                         'ping',
@@ -118,10 +119,18 @@ class Commands(commands.Cog, name="Commands"):
 
     @commands.command()
     async def twitter(self, ctx):
+        """What's sid's twitter?"""
         twitter = discord.Embed(title="Sid's Twitter:", description="https://twitter.com/wq_one")
         await ctx.send(embed=twitter)
 
     @commands.command()
     async def github(self, ctx):
+        """What's sid's github?"""
         github = discord.Embed(title="Sid's Github:", description="https://github.com/one-wq")
         await ctx.send(embed=github)
+
+    @commands.command(aliases=['bot'])
+    async def source(self, ctx):
+        """What's the bot repo?"""
+        link = "https://github.com/one-wq/heather-discord-bot"
+        await ctx.send(link)
