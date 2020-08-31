@@ -2,9 +2,6 @@ from discord.ext import commands
 import discord
 
 
-def setup(bot):
-    bot.add_cog(Commands(bot=bot))
-
 
 class Commands(commands.Cog, name="Commands"):
     def __init__(self, bot):
@@ -134,3 +131,22 @@ class Commands(commands.Cog, name="Commands"):
         """What's the bot repo?"""
         link = "https://github.com/one-wq/heather-discord-bot"
         await ctx.send(link)
+
+    @commands.command(aliases=["av"])
+    async def avatar(self, ctx, member: commands.MemberConverter = None):
+        if member is None:
+            avatar_url = ctx.author.avatar_url
+            embed = discord.Embed()
+            embed.set_author(name=f"{ctx.author}", icon_url=avatar_url)
+            embed.set_image(url=avatar_url)
+            await ctx.send(embed=embed)
+        elif member is not None:
+            avatar_url = member.avatar_url
+            embed = discord.Embed()
+            embed.set_author(name=f"{member}", icon_url=ctx.author.avatar_url)
+            embed.set_image(url=avatar_url)
+            await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Commands(bot=bot))
