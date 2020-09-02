@@ -134,18 +134,12 @@ class Commands(commands.Cog, name="Commands"):
 
     @commands.command(aliases=["av"])
     async def avatar(self, ctx, member: commands.MemberConverter = None):
-        if member is None:
-            avatar_url = ctx.author.avatar_url
-            embed = discord.Embed()
-            embed.set_author(name=f"{ctx.author}", icon_url=avatar_url)
-            embed.set_image(url=avatar_url)
-            await ctx.send(embed=embed)
-        elif member is not None:
-            avatar_url = member.avatar_url
-            embed = discord.Embed()
-            embed.set_author(name=f"{member}", icon_url=ctx.author.avatar_url)
-            embed.set_image(url=avatar_url)
-            await ctx.send(embed=embed)
+        member = member or ctx.author
+        embed = discord.Embed()
+        embed.set_author(name=f"{ctx.author}", icon_url=member.avatar_url)
+        embed.set_footer(text=f"Requested by {member.display_name}")
+        embed.set_image(url=member.avatar_url)
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
