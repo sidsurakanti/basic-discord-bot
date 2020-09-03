@@ -52,10 +52,7 @@ class Commands(commands.Cog, name="Commands"):
     @commands.command()
     async def rules(self, ctx):
         """What are the rules of this server?"""
-        rules = discord.Embed(
-            title="Server Rules",
-            colour = discord.Colour.magenta(),
-        )
+        rules = discord.Embed(title="Server Rules", colour=discord.Colour.magenta())
 
         rules.add_field(name="Rule 1", value="No racism and polictics", inline=False)
         rules.add_field(name="Rule 2", value="Spamming will result in a kick, mute, or ban", inline=False)
@@ -92,7 +89,7 @@ class Commands(commands.Cog, name="Commands"):
             await ctx.send(f"**Commands:**"
                            f"{cmd}")
 
-    @commands.command()
+    @commands.command(aliases=["userinfo"])
     async def info(self, ctx, member: discord.Member=None):
         """User info"""
         member = ctx.author if not member else member
@@ -134,6 +131,7 @@ class Commands(commands.Cog, name="Commands"):
 
     @commands.command(aliases=["av"])
     async def avatar(self, ctx, member: commands.MemberConverter = None):
+        """What's your profile pic?"""
         member = member or ctx.author
         embed = discord.Embed()
         embed.set_author(name=f"{ctx.author}", icon_url=member.avatar_url)
@@ -141,6 +139,15 @@ class Commands(commands.Cog, name="Commands"):
         embed.set_image(url=member.avatar_url)
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=["new_poll", "p"])
+    async def poll(self, ctx, desc):
+        """Poll"""
+        await ctx.message.delete()
+        msg = discord.Embed(title=f"Poll", description=desc, colour=discord.Colour.dark_teal())
+        msg.set_footer(text=f"Requested by {ctx.author.display_name}")
+        msg = await ctx.send(embed=msg)
+        await msg.add_reaction('👍')
+        await msg.add_reaction('👎')
 
 def setup(bot):
     bot.add_cog(Commands(bot=bot))
