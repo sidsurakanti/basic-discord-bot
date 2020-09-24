@@ -49,23 +49,6 @@ class Giveaway(commands.Cog):
             msg_embed.set_footer(text="Go do some fishing till then")
             await ctx.message.channel.send(embed=msg_embed)
 
-    @commands.command()
-    async def pp(self, ctx, member: discord.Member = None):
-        if member is None:
-            member = ctx.author
-        woah = np.random.randint(low=1, high=13)
-        pp = '**' + '8' + '=' * woah + 'D' + '**'
-        msg_embed = Embed(
-            description=pp,
-            colour=0xeb9bd9
-        )
-        msg_embed.set_author(
-            name=member.name + "'s pp size",
-            icon_url=member.avatar_url
-        )
-        msg_embed.set_footer(text="Woah that's • big!" if woah >= 6 else "Woah that's • small")
-        await ctx.send(embed=msg_embed)
-
     @commands.command(aliases=['facts', 'fax'])
     async def fact(self, ctx, *, animal=None):
         if animal is None:
