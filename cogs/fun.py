@@ -260,13 +260,6 @@ class Giveaway(commands.Cog):
         )
         await ctx.message.channel.send(embed=mc_embed)
 
-    @commands.command()
-    @commands.guild_only()
-    async def rush(self, ctx, hp=3):
-        e = Embed(title="Command under construction",
-                  description="This command is still under construction.").set_thumbnail(url=self.bot.user.avatar_url)
-        await ctx.send(embed=e)
-
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))
