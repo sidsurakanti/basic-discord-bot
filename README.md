@@ -1,6 +1,3 @@
-## Description
-Hey there! Heather is the discord bot that i'm currently using in my discord server. You can join the server here: https://discord.gg/ScVMjup. 
-
 ## Commands
   `h.help` - shows the default help command for the bot
   <br>
