@@ -1,1 +1,1 @@
-BOT_TOKEN = ""  # You bot token
+BOT_TOKEN = "" # put your discord bot token here
