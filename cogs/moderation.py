@@ -1,13 +1,10 @@
-import datetime
-
 from discord.ext import commands
 from discord.utils import get
 import discord
 
 
-def setup(bot):
-    bot.add_cog(Moderation(bot=bot))
-
+async def setup(bot):
+    await bot.add_cog(Moderation(bot=bot))
 
 class Moderation(commands.Cog, name="Moderation"):
     def __init__(self, bot):
@@ -52,24 +49,18 @@ class Moderation(commands.Cog, name="Moderation"):
                 await ctx.send(f"{user.mention} has been unbanned!")
                 return
 
-    # TODO: Make warn command
-    @commands.command()
-    @commands.has_permissions(administrator=True)
-    async def warn(self, ctx, member: discord.Member, reason: str = None):
-        """Warns function (not finished)"""
-        pass
-
-    # TODO: Make mute command
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def mute(self, ctx, member: discord.Member, *, reason=None):
         """Mute function"""
+        # make sure to create a role and name it "Muted" and make sure people with that role have no speaking perms
         await member.add_roles(get(member.guild.roles, name='Muted'))
         await ctx.send(embed=discord.Embed(title=f"Muted {member.display_name}", color=discord.Colour.blue()))
     
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def unmute(self, ctx, member: discord.Member):
-        """Unmuted function"""
+        """Unmute function"""
+        # make sure to create a role and name it "Muted" and make sure people with that role have no speaking perms
         await member.remove_roles(get(member.guild.roles, name="Muted"))
         await ctx.send(embed=discord.Embed(title=f"Unmuted {member.display_name}", color=discord.Colour.blue()))
