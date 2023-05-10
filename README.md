@@ -1,13 +1,15 @@
-## Commands
-  `h.help` - shows the default help command for the bot
+#### Commands
+  `.help` - shows the default help command for the bot
   <br>
-  `h.info <member: none>` - shows the discord info for `<member>` (btw, `<member>` is default to the person that invoked to the command if they didn't mention a person) 
+  `.info <member=author>` - shows the discord info for `<member>`
   <br>
-  `h.members` - returns the number of people in the server (excluding bots)
+  `.avatar` - displays user avatar
   <br>
-  `h.messages` - shows the number of messages you've sent in channel the command was invoked in
+  `.members` - displays the # of real people in the server
   <br>
-  `h.ping` - shows the latency/ping of the bot
+  `.messages` - shows the number of messages you've sent in channel the command was invoked in
   <br>
-  `h.poll <text>` - creates a new poll with text `<text>` and adds :thumbsup: and :thumbsdown: emoji to the poll message
+  `.ping` - shows the latency of the bot
+  <br>
+  `.poll <text>` - creates a new poll with text `<text>` and adds :thumbsup: and :thumbsdown: emoji to the poll message
   <br>
